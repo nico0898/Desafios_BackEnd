@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <button id="button">Presionar</button> -->
+
+    <input type="text">
+    <span></span>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/6.6.7/rxjs.umd.js"></script>
+
+    <script>
+        // importar la libreria
+        const { Observable } = rxjs;
+
+        function observable () {
+            return new Observable(subscribe => {
+
+                const changeInputValue = () => {
+                    let dato = document.querySelector('input').value
+                    
+                    if (dato == 'error') {
+                        subscribe.error('Observable Input error')
+                    }
+                    else if (dato == 'complete') {
+                        subscribe.complete()
+                    }
+                    else {
+                        
+                        let datoEspejado = dato.split('').reverse().join('');
+                        subscribe.next(datoEspejado)
+                    }
+                }
+
+                document.querySelector('input').addEventListener('input', changeInputValue)
+                
+                return () => {
+                    // elimino el listener y limpio el input
+                    document.querySelector('input').removeEventListener('input', changeInputValue)
+                    document.querySelector('input').disabled = true
+                    document.querySelector('span').innerText = ''
+                    
+                    console.warn('Observable Input return')
+                }
+            })
+        }
+
+        let observableInput = observable().subscribe({
+            next: value => {
+                document.querySelector('span').innerText = value
+            },
+            error: err => console.error('Error encontrado: ', err),
+            complete: _ => console.log('Ya no hay más valores por recibir')
+        })
+
+        setTimeout(() => {
+            console.warn('Observable Input desuscripción')
+            observableInput.unsubscribe()
+        }, 30000)
+
+    </script>
+</body>
+</html>
