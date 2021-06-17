@@ -1,0 +1,22 @@
+<%- include('./layout')-%>
+
+<body>
+	<div class="table-responsive">
+		<table class="table table-responsive table-striped">
+			<tr>
+				<th>Titulo</th>
+				<th>Precio</th>
+				<th>Thumbnail</th>
+			</tr>
+
+			<%productos.forEach(p => { %>
+			<tr>
+				<td><%=p.title%></td>
+				<td><%=p.price%></td>
+				<td><img style="width: 40px;" src=<%=p.thumbnail%>> </td>
+			</tr>
+			<%});%>
+		</table>
+	</div>
+</body>
+</html>
